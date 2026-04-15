@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { LogIn, UserPlus } from 'lucide-react';
@@ -8,7 +8,7 @@ import { api } from '@/lib/api';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import toast from 'react-hot-toast';
 
-function LoginContent() {
+export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isLogin, setIsLogin] = useState(true);
@@ -43,7 +43,7 @@ function LoginContent() {
         const inviteToken = Cookies.get('pending_invite_token');
         if (inviteToken) {
           try {
-            await api.post(`/warehouses/invitation/${inviteToken}/accept`, {});
+            await api.post(`/warehouses/invitation/${inviteToken}/accept`);
             Cookies.remove('pending_invite_token');
           } catch (e) {
             console.error('Failed to accept invite token:', e);
@@ -146,13 +146,5 @@ function LoginContent() {
         </div>
       </div>
     </div>
-  );
-}
-
-export default function LoginPage() {
-  return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-background text-foreground">Loading...</div>}>
-      <LoginContent />
-    </Suspense>
   );
 }
